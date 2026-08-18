@@ -1,6 +1,5 @@
 namespace mathGame.MichaelHelgesen.Enums;
 
-
 internal enum MenuItems
 {
     Addition,
