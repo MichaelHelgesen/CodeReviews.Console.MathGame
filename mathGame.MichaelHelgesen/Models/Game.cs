@@ -1,7 +1,6 @@
 namespace mathGame.MichaelHelgesen.Models;
 
 using mathGame.MichaelHelgesen.Enums;
-using Microsoft.VisualBasic;
 using Spectre.Console;
 
 internal class Game
@@ -12,18 +11,8 @@ internal class Game
 
     internal static List<GameTurn> gameTurns = new();
 
-    public class GameTurn
-    {
-        public MathProblem MathProblem { get; set; }
-        public PlayerAnswer PlayerAnswer { get; set; }
-        //public int TurnNumber { get; set; }
-    }
-        public class GameData
-        {
-            public string GameType { get; set; }
-            public List<GameTurn> GameTurns { get; set; }
-        }
     
+
     internal static void PlayGame(MenuItems gameType)
     {
         GameData playedGame = new GameData();
@@ -50,10 +39,10 @@ internal class Game
             gameTurn.MathProblem = mathProblem;
             gameTurn.PlayerAnswer = answer;
 
-            gameTurns.Add(gameTurn);
+            playedGame.GameTurns.Add(gameTurn);
 
         }
-        playedGame.GameTurns = gameTurns;
+        //playedGame.GameTurns = gameTurns;
 
         foreach (var item in playedGame.GameTurns)
         {
@@ -63,5 +52,16 @@ internal class Game
             Console.WriteLine(item.PlayerAnswer.IsCorrect);
         }
         // return playedGame;
+    }
+    public class GameTurn
+    {
+        public MathProblem MathProblem { get; set; }
+        public PlayerAnswer PlayerAnswer { get; set; }
+        //public int TurnNumber { get; set; }
+    }
+    public class GameData
+    {
+        public string GameType { get; set; }
+        public List<GameTurn> GameTurns { get; set; } = new();
     }
 }
