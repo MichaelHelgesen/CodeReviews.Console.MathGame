@@ -1,2 +1,0 @@
-namespace mathGame.MichaelHelgesen.Models;
-

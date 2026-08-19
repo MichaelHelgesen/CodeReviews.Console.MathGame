@@ -1,17 +1,20 @@
+namespace mathGame.MichaelHelgesen.Controllers;
 using mathGame.MichaelHelgesen.Enums;
+using mathGame.MichaelHelgesen.Models;
 using Spectre.Console;
 
-namespace mathGame.MichaelHelgesen.Controllers;
+
 public class GameController()
 {
     // DONE: Display message
-    // Play 5 rounds
+    // Play Game
     // Archive game
 
-    internal static void PlayGame(MenuItems gameType)
+    internal static void StartGame(MenuItems gameType)
     {
+        // var game = List of rounds?
         DisplayStartMessage(gameType);
-        PlayGame(gameType);
+        Game.PlayGame(gameType);
     }
 
     internal static void DisplayStartMessage(MenuItems gameType)

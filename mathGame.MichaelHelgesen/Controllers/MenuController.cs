@@ -48,7 +48,7 @@ internal class MenuController
                 break;
             default:
                 //AnsiConsole.MarkupLine($"Spill spill");
-                GameController.PlayGame(playerChoice);
+                GameController.StartGame(playerChoice);
                 break;
         }
     }
