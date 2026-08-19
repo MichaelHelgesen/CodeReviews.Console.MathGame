@@ -1,28 +1,45 @@
+using mathGame.MichaelHelgesen.Enums;
+
 namespace mathGame.MichaelHelgesen.Models;
 
 internal class MathProblem
 {
-    public int Number1 { get; }
-    public int Number2 { get; }
+    public int FirstNumber { get; }
+    public int SecondNumber { get; }
     public string Operator { get; }
+    public int CorrectAnswer { get; }
 
-    // Konstruktør som setter tallene når oppgaven lages
-    public MathProblem(int number1, int number2, string op)
+    public MathProblem(MenuItems gameType)
     {
-        Number1 = number1;
-        Number2 = number2;
-        Operator = op;
+        var random = Random.Shared;
+
+        switch (gameType)
+        {
+            case MenuItems.Addition:
+                FirstNumber = random.Next(1, 100);
+                SecondNumber = random.Next(1, 100);
+                Operator = "+";
+                CorrectAnswer = FirstNumber + SecondNumber;
+                break;
+            case MenuItems.Subtraction:
+                FirstNumber = random.Next(1, 100);
+                SecondNumber = random.Next(1, 100);
+                Operator = "-";
+                CorrectAnswer = FirstNumber - SecondNumber;
+                break;
+            case MenuItems.Multiplication:
+                FirstNumber = random.Next(1, 100);
+                SecondNumber = random.Next(1, 100);
+                Operator = "*";
+                CorrectAnswer = FirstNumber * SecondNumber;
+                break;
+            case MenuItems.Division:
+                FirstNumber = random.Next(1, 10);
+                SecondNumber = random.Next(1, 10);
+                FirstNumber *=  SecondNumber;
+                Operator = "/";
+                CorrectAnswer = FirstNumber / SecondNumber;
+                break;
+        }
     }
-
-    public int CorrectAnswer => Operator switch
-    {
-        "+" => Number1 + Number2,
-        "-" => Number1 - Number2,
-        "*" => Number1 * Number2,
-        "/" => Number1 / Number2,
-        _ => 0
-    };
-
-    public string MathProblemAsString => $"{Number1} {Operator} {Number2}";
-
 }

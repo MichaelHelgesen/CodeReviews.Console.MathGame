@@ -2,15 +2,12 @@ namespace mathGame.MichaelHelgesen.Models;
 
 internal class PlayerAnswer
 {
-    public string MathProblem { get; set; }
-    public int CorrectAnswer { get; set; }
-    public int Answer { get; set; }
-
-    public PlayerAnswer(string mathProblem, int correctAnswer, int answer)
+    public int Answer { get; }
+    public int MathAnswer { get; }
+    public PlayerAnswer(int correctMathAnswer, int playerAnswer)
     {
-        MathProblem = mathProblem;
-        CorrectAnswer = correctAnswer;
-        Answer = answer;
+        Answer = playerAnswer;
+        MathAnswer = correctMathAnswer;
     }
-    public bool IsCorrect => Answer == CorrectAnswer;
+    public bool IsCorrect => Answer == MathAnswer;
 }
