@@ -18,13 +18,12 @@ internal class Game
         public PlayerAnswer PlayerAnswer { get; set; }
         //public int TurnNumber { get; set; }
     }
-    /*
         public class GameData
         {
             public string GameType { get; set; }
-            public List<GameRound> Rounds { get; set; } = new List<GameRound>();
+            public List<GameTurn> GameTurns { get; set; } = new List<GameTurn>();
         }
-    */
+    
     internal static void PlayGame(MenuItems gameType)
     {
         //GameData playedGame = new GameData();
@@ -42,7 +41,7 @@ internal class Game
             AnsiConsole.MarkupLine($"[bold blue]Spørsmål {i + 1} av 5[/]");
 
             // Generate question + collect answer
-            int playerAnswer = AnsiConsole.Ask<int>($"Hva er [green]{mathProblem.FirstNumber} {mathProblem.Operator} {mathProblem.SecondNumber}[/]?");
+            int playerAnswer = AnsiConsole.Ask<int>($"Hva er [green]{mathProblem.AsString}[/]?");
 
             // Player answer
             PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);

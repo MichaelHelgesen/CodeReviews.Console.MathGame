@@ -4,42 +4,45 @@ namespace mathGame.MichaelHelgesen.Models;
 
 internal class MathProblem
 {
-    public int FirstNumber { get; }
-    public int SecondNumber { get; }
+    public int FirstNumber { get; set; }
+    public int SecondNumber { get; set; }
     public string Operator { get; }
-    public int CorrectAnswer { get; }
+    public int CorrectAnswer { get; set; }
 
     public MathProblem(MenuItems gameType)
     {
-        var random = Random.Shared;
-
         switch (gameType)
         {
             case MenuItems.Addition:
-                FirstNumber = random.Next(1, 100);
-                SecondNumber = random.Next(1, 100);
+                GenerateNumbers();
                 Operator = "+";
                 CorrectAnswer = FirstNumber + SecondNumber;
                 break;
             case MenuItems.Subtraction:
-                FirstNumber = random.Next(1, 100);
-                SecondNumber = random.Next(1, 100);
+                GenerateNumbers();
                 Operator = "-";
                 CorrectAnswer = FirstNumber - SecondNumber;
                 break;
             case MenuItems.Multiplication:
-                FirstNumber = random.Next(1, 100);
-                SecondNumber = random.Next(1, 100);
+                GenerateNumbers();
                 Operator = "*";
                 CorrectAnswer = FirstNumber * SecondNumber;
                 break;
             case MenuItems.Division:
-                FirstNumber = random.Next(1, 10);
-                SecondNumber = random.Next(1, 10);
-                FirstNumber *=  SecondNumber;
+                GenerateNumbers();
+                FirstNumber *= SecondNumber;
                 Operator = "/";
                 CorrectAnswer = FirstNumber / SecondNumber;
                 break;
         }
     }
+
+    public void GenerateNumbers()
+    {
+        var random = Random.Shared;
+        FirstNumber = random.Next(1, 100);
+        SecondNumber = random.Next(1, 100);
+    }
+
+    public string AsString => $"{FirstNumber} {Operator} {SecondNumber}";
 }
