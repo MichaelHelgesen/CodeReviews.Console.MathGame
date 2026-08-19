@@ -21,13 +21,13 @@ internal class Game
         public class GameData
         {
             public string GameType { get; set; }
-            public List<GameTurn> GameTurns { get; set; } = new List<GameTurn>();
+            public List<GameTurn> GameTurns { get; set; }
         }
     
     internal static void PlayGame(MenuItems gameType)
     {
-        //GameData playedGame = new GameData();
-        //playedGame.GameType = gameType.ToString();
+        GameData playedGame = new GameData();
+        playedGame.GameType = gameType.ToString();
 
         for (int i = 0; i < numberOfTurns; i++)
         {
@@ -53,7 +53,9 @@ internal class Game
             gameTurns.Add(gameTurn);
 
         }
-        foreach (var item in gameTurns)
+        playedGame.GameTurns = gameTurns;
+
+        foreach (var item in playedGame.GameTurns)
         {
             Console.WriteLine($"{item.MathProblem.FirstNumber} {item.MathProblem.Operator} {item.MathProblem.SecondNumber}");
             Console.WriteLine(item.PlayerAnswer.Answer);
