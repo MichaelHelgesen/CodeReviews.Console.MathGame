@@ -7,16 +7,10 @@ internal class Game
 {
     private static int numberOfTurns = 5;
 
-    private static int points = 0;
-
-    internal static List<GameTurn> gameTurns = new();
-
-    
-
-    internal static void PlayGame(MenuItems gameType)
+    internal static GameData PlayRound(MenuItems gameType)
     {
-        GameData playedGame = new GameData();
-        playedGame.GameType = gameType.ToString();
+        GameData playedGame = new GameData(gameType);
+        //playedGame.GameType = gameType.ToString();
 
         for (int i = 0; i < numberOfTurns; i++)
         {
@@ -51,7 +45,7 @@ internal class Game
             Console.WriteLine(item.MathProblem.CorrectAnswer);
             Console.WriteLine(item.PlayerAnswer.IsCorrect);
         }
-        // return playedGame;
+        return playedGame;
     }
     public class GameTurn
     {
@@ -59,9 +53,23 @@ internal class Game
         public PlayerAnswer PlayerAnswer { get; set; }
         //public int TurnNumber { get; set; }
     }
-    public class GameData
+    public class GameData(MenuItems gameType)
     {
-        public string GameType { get; set; }
+        public MenuItems GameType { get; set; } = gameType;
         public List<GameTurn> GameTurns { get; set; } = new();
+
+        //public int Points { get;set; } = 0;
+
+        public int Points()
+        {
+            int points = 0;
+            foreach (var turn in GameTurns)
+            {
+                if(turn.PlayerAnswer.IsCorrect)
+                     points++;
+            }
+
+            return points;
+        }
     }
 }

@@ -40,8 +40,8 @@ internal class MathProblem
     public void GenerateNumbers()
     {
         var random = Random.Shared;
-        FirstNumber = random.Next(1, 100);
-        SecondNumber = random.Next(1, 100);
+        FirstNumber = random.Next(1, 10);
+        SecondNumber = random.Next(1, 10);
     }
 
     public string AsString => $"{FirstNumber} {Operator} {SecondNumber}";

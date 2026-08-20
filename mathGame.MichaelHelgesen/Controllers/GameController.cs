@@ -9,12 +9,13 @@ public class GameController()
     // DONE: Display message
     // Play Game
     // Archive game
-
+    static Archive archive = new();
+    // Etablere arkiv
     internal static void StartGame(MenuItems gameType)
     {
-        // var game = List of rounds?
         DisplayStartMessage(gameType);
-        Game.PlayGame(gameType);
+        var gameRound = Game.PlayRound(gameType);
+        archive.ArchiveGameRound(gameRound);
     }
 
     internal static void DisplayStartMessage(MenuItems gameType)
