@@ -2,9 +2,24 @@ namespace mathGame.MichaelHelgesen.Models;
 
 internal class Archive
 {
-    public  List<Game.GameData> ArchivedGames = new();
-    public void ArchiveGameRound(Game.GameData game)
+    internal List<Game.GameData> ArchivedGames = new();
+    internal void ArchiveGameRound(Game.GameData game)
     {
         ArchivedGames.Add(game);
+    }
+
+    internal void DisplayArchive()
+    {
+        foreach (var gameRound in ArchivedGames)
+        {
+            Console.WriteLine($"A game of {gameRound.GameType}");
+            foreach (var gameTurn in gameRound.GameTurns)
+            {
+                Console.WriteLine($"Math problem: {gameTurn.MathProblem.AsString}");
+                Console.WriteLine($"Correct answer: {gameTurn.MathProblem.CorrectAnswer}");
+                Console.WriteLine($"Player answer: {gameTurn.PlayerAnswer.Answer}");
+                Console.WriteLine($"Player answer correct: {gameTurn.PlayerAnswer.IsCorrect}");
+            }
+        }
     }
 }
