@@ -13,6 +13,7 @@ internal class Archive
         foreach (var gameRound in ArchivedGames)
         {
             Console.WriteLine($"A game of {gameRound.GameType}");
+            Console.WriteLine($"Game number: {gameRound.GameNumber}");
             foreach (var gameTurn in gameRound.GameTurns)
             {
                 Console.WriteLine($"Math problem: {gameTurn.MathProblem.AsString}");

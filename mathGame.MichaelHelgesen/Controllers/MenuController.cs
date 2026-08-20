@@ -15,64 +15,68 @@ using Spectre.Console;
 // TODO: Add a timer to track how long the user takes to finish the game.
 // TODO: Create a 'Random Game' option where the players will be presented with questions from random operations
 
-internal class MenuController
+class MenuController
 {
     internal static void Run()
     {
-        ShowWelcomeMessage();
+        Console.Clear();
+        AnsiConsole.MarkupLine("[bold blue]Welcome[/] to [green]the Math Game[/]!");
         var playerChoice = PromptMenu();
         ExecutePlayerChoice(playerChoice);
-
-    }
-
-    private static void ShowWelcomeMessage()
-    {
-        AnsiConsole.MarkupLine("[bold blue]Welcome[/] to [green]the Math Game[/]!");
     }
 
     private static MenuItems PromptMenu()
     {
-        var choices = Enum.GetValues<MenuItems>().ToList();
-        if (GameController.archive.ArchivedGames.Count < 1)
-            choices.Remove(MenuItems.Results);
-        var menuChoices = AnsiConsole.Prompt(
+        var menuChoices = GenerateMenuChoices();
+        var menuChoice = AnsiConsole.Prompt(
         new SelectionPrompt<MenuItems>()
             .Title("Choose [green]game type[/] would you like?")
-            .UseConverter(item => item switch
-        {
-            MenuItems.Addition => "➕ Legg sammen tall (Addisjon)",
-            MenuItems.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
-            MenuItems.Division => "Dele",
-            MenuItems.Multiplication => "* Gange",
-            MenuItems.Results => "📊 Vis tidligere resultat og statistikk",
-            MenuItems.Quit => "❌ Avslutt spillet",
-            _ => item.ToString()
-        })
-            .AddChoices(choices));
-        return menuChoices;
+            .UseConverter(item => GenerateMenuItems(item))
+            .AddChoices(menuChoices));
+        return menuChoice;
     }
 
-    private static void ExecutePlayerChoice(MenuItems playerChoice)
+    private static void ExecutePlayerChoice(MenuItems gameMode)
     {
-        switch (playerChoice)
+        switch (gameMode)
         {
             case MenuItems.Quit:
-                AnsiConsole.MarkupLine($"You selected: [yellow]{playerChoice}[/]");
+                AnsiConsole.MarkupLine($"You selected: [yellow]{gameMode}[/]");
                 break;
             case MenuItems.Results:
                 Console.Clear();
-                AnsiConsole.MarkupLine($"You selected: [yellow]{playerChoice}[/]");
+                AnsiConsole.MarkupLine($"You selected: [yellow]{gameMode}[/]");
                 GameController.archive.DisplayArchive();
                 AnsiConsole.Prompt(
-    new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
-        .AllowEmpty()
-);
+                    new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
+                    .AllowEmpty()
+                );
                 Run();
                 break;
             default:
-                //AnsiConsole.MarkupLine($"Spill spill");
-                GameController.StartGame(playerChoice);
+                GameController.StartGame(gameMode);
                 break;
         }
+    }
+
+    private static List<MenuItems> GenerateMenuChoices()
+    {
+        var choices = Enum.GetValues<MenuItems>().ToList();
+        if (GameController.archive.ArchivedGames.Count < 1) choices.Remove(MenuItems.Results);
+        return choices;
+    }
+
+    private static string GenerateMenuItems(MenuItems item)
+    {
+        return item switch
+            {
+                MenuItems.Addition => "➕ Legg sammen tall (Addisjon)",
+                MenuItems.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
+                MenuItems.Division => "Dele",
+                MenuItems.Multiplication => "* Gange",
+                MenuItems.Results => "📊 Vis tidligere resultat og statistikk",
+                MenuItems.Quit => "❌ Avslutt spillet",
+                _ => item.ToString()
+            };
     }
 }
