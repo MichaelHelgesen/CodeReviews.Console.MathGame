@@ -5,7 +5,7 @@ using mathGame.MichaelHelgesen.Models;
 using Spectre.Console;
 
 
-public class GameController()
+class GameController()
 {
     internal static Archive archive = new();
 
