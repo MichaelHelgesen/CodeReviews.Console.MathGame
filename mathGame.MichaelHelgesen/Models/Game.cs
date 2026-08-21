@@ -6,7 +6,8 @@ using Spectre.Console;
 class Game
 {
     static readonly int numberOfTurns = 5;
-    internal static GameData PlayRound(MenuItems gameType)
+internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
+    internal static GameData PlayRound(Menu gameType)
     {
         List<GameTurn> turns = [];
 
@@ -34,11 +35,11 @@ class Game
         internal MathProblem MathProblem { get; } = mathProblem;
         internal PlayerAnswer PlayerAnswer { get; } = playerAnswer;
     }
-    internal class GameData(MenuItems gameType, List<GameTurn> turns)
+    internal class GameData(Menu gameType, List<GameTurn> turns)
     {
         static int _nextGameNumber = 1;
         internal int GameNumber { get; } = _nextGameNumber++;
-        internal MenuItems GameType { get; } = gameType;
+        internal Menu GameType { get; } = gameType;
         internal List<GameTurn> GameTurns { get; } = turns;
 
 

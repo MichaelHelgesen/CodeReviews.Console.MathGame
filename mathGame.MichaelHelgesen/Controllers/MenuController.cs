@@ -1,6 +1,7 @@
 namespace mathGame.MichaelHelgesen.Controllers;
 
 using mathGame.MichaelHelgesen.Enums;
+using mathGame.MichaelHelgesen.Models;
 using Spectre.Console;
 
 // DONE: Users should be presented with a menu to choose an operation
@@ -10,9 +11,8 @@ using Spectre.Console;
 // DONE: You should record previous games in a List and there should be an option in the menu for the user to visualize a history of previous games.
 // DONE: To follow the DRY Principle, try using just one method for all games. Additionally, double check your project and try to find opportunities to achieve the same functionality with less code, avoiding repetition when possible.
 // DONE: Create a 'Random Game' option where the players will be presented with questions from random operations
+// DONE: Try to implement levels of difficulty.
 
-
-// TODO: Try to implement levels of difficulty.
 // TODO: Add a timer to track how long the user takes to finish the game.
 
 class MenuController
@@ -20,12 +20,59 @@ class MenuController
     internal static void Run()
     {
         Console.Clear();
+
         AnsiConsole.MarkupLine("[bold blue]Welcome[/] to [green]the Math Game[/]!");
-        var playerChoice = PromptMenu();
-        ExecutePlayerChoice(playerChoice);
+
+        var playerChoice = DisplayMainMenu();
+
+        switch (playerChoice)
+        {
+            case MenuItems.Play:
+                DisplayGameMenu();
+                break;
+            case MenuItems.Results:
+                DisplayResults(playerChoice);
+                break;
+            case MenuItems.Difficulty:
+                DisplayDifficultyMenu();
+                break;
+        }
     }
 
-    private static MenuItems PromptMenu()
+    private static void DisplayDifficultyMenu()
+    {
+        var difficulty = Enum.GetValues<Difficulty>().ToList();
+        var difficultyChoice = AnsiConsole.Prompt(
+             new SelectionPrompt<Difficulty>()
+                    .Title("Choose [green]game type[/] would you like?")
+                    .AddChoices(difficulty));
+        Game.DifficultySetting = difficultyChoice;
+        Run();
+    }
+
+    private static void DisplayResults(MenuItems playerChoice)
+    {
+        Console.Clear();
+        AnsiConsole.MarkupLine($"You selected: [yellow]{playerChoice}[/]");
+        GameController.archive.DisplayArchive();
+        AnsiConsole.Prompt(
+            new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
+            .AllowEmpty()
+        );
+        Run();
+    }
+    private static void DisplayGameMenu()
+    {
+        var choices = Enum.GetValues<Menu>().ToList();
+        var menuChoice = AnsiConsole.Prompt(
+             new SelectionPrompt<Menu>()
+                    .Title("Choose [green]game type[/] would you like?")
+                    .UseConverter(item => GenerateGameMenu(item))
+                    .AddChoices(choices));
+        GameController.StartGame(menuChoice);
+    }
+
+    private static MenuItems DisplayMainMenu()
     {
         var menuChoices = GenerateMenuChoices();
         var menuChoice = AnsiConsole.Prompt(
@@ -34,29 +81,6 @@ class MenuController
             .UseConverter(item => GenerateMenuItems(item))
             .AddChoices(menuChoices));
         return menuChoice;
-    }
-
-    private static void ExecutePlayerChoice(MenuItems gameMode)
-    {
-        switch (gameMode)
-        {
-            case MenuItems.Quit:
-                AnsiConsole.MarkupLine($"You selected: [yellow]{gameMode}[/]");
-                break;
-            case MenuItems.Results:
-                Console.Clear();
-                AnsiConsole.MarkupLine($"You selected: [yellow]{gameMode}[/]");
-                GameController.archive.DisplayArchive();
-                AnsiConsole.Prompt(
-                    new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
-                    .AllowEmpty()
-                );
-                Run();
-                break;
-            default:
-                GameController.StartGame(gameMode);
-                break;
-        }
     }
 
     private static List<MenuItems> GenerateMenuChoices()
@@ -69,14 +93,25 @@ class MenuController
     private static string GenerateMenuItems(MenuItems item)
     {
         return item switch
-            {
-                MenuItems.Addition => "➕ Legg sammen tall (Addisjon)",
-                MenuItems.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
-                MenuItems.Division => "Dele",
-                MenuItems.Multiplication => "* Gange",
-                MenuItems.Results => "📊 Vis tidligere resultat og statistikk",
-                MenuItems.Quit => "❌ Avslutt spillet",
-                _ => item.ToString()
-            };
+        {
+            MenuItems.Difficulty => "Velg vanskelighetsgrad",
+            MenuItems.Play => "Spill en runde",
+            MenuItems.Results => "📊 Vis tidligere resultat og statistikk",
+            MenuItems.Quit => "❌ Avslutt spillet",
+            _ => item.ToString()
+        };
     }
+
+    private static string GenerateGameMenu(Menu item)
+    {
+        return item switch
+        {
+            Menu.Addition => "➕ Legg sammen tall (Addisjon)",
+            Menu.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
+            Menu.Division => "Dele",
+            Menu.Multiplication => "* Gange",
+            _ => item.ToString()
+        };
+    }
+
 }

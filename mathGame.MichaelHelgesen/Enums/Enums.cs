@@ -1,14 +1,12 @@
 namespace mathGame.MichaelHelgesen.Enums;
 
-enum MenuItems
+enum Menu
 {
     Addition,
     Multiplication,
     Division,
     Subtraction,
-    Random,
-    Results,
-    Quit
+    Random
 }
 
 enum Difficulty
@@ -18,7 +16,7 @@ enum Difficulty
     Hard
 }
 
-enum MenuChoice
+enum MenuItems
 {
     Play,
     Results,

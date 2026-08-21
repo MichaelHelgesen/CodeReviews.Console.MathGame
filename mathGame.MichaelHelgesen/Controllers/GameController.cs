@@ -9,7 +9,7 @@ class GameController()
 {
     internal static Archive archive = new();
 
-    internal static void StartGame(MenuItems gameType)
+    internal static void StartGame(Menu gameType)
     {
         AnsiConsole.Prompt(
             new TextPrompt<string>($"You selected: [yellow]{gameType}[/]. [grey]Press [bold]Enter[/] to continue...[/]")

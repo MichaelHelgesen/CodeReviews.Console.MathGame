@@ -9,29 +9,29 @@ class MathProblem
     internal string Operator { get; }
     internal int CorrectAnswer { get; set; }
 
-    internal MathProblem(MenuItems gameType)
+    internal MathProblem(Menu gameType)
     {
 
-        if (gameType == MenuItems.Random) gameType = GenerateRandomOperator();
+        if (gameType == Menu.Random) gameType = GenerateRandomOperator();
 
         GenerateNumbers();
 
         switch (gameType)
         {
-            case MenuItems.Addition:
+            case Menu.Addition:
 
                 Operator = "+";
                 CorrectAnswer = FirstNumber + SecondNumber;
                 break;
-            case MenuItems.Subtraction:
+            case Menu.Subtraction:
                 Operator = "-";
                 CorrectAnswer = FirstNumber - SecondNumber;
                 break;
-            case MenuItems.Multiplication:
+            case Menu.Multiplication:
                 Operator = "*";
                 CorrectAnswer = FirstNumber * SecondNumber;
                 break;
-            case MenuItems.Division:
+            case Menu.Division:
                 FirstNumber *= SecondNumber;
                 Operator = "/";
                 CorrectAnswer = FirstNumber / SecondNumber;
@@ -41,18 +41,23 @@ class MathProblem
 
     void GenerateNumbers()
     {
-        FirstNumber = Random.Shared.Next(1, 10);
-        SecondNumber = Random.Shared.Next(1, 10);
+
+        var maxNumber = Game.DifficultySetting switch
+        {
+            Difficulty.Hard => 1000,
+            Difficulty.Easy => 10,
+            _ => 100,
+        };
+
+        FirstNumber = Random.Shared.Next(0, maxNumber);
+        SecondNumber = Random.Shared.Next(1, maxNumber);
     }
 
-    MenuItems GenerateRandomOperator()
+    Menu GenerateRandomOperator()
     {
-        // This feels like a bad solution
-        // I would rather have two Enums? 
-        var values = Enum.GetValues<MenuItems>()
-                            .Where(m => m != MenuItems.Quit
-                                     && m != MenuItems.Results
-                                     && m != MenuItems.Random)
+
+        var values = Enum.GetValues<Menu>()
+                            .Where(m => m != Menu.Random)
                             .ToArray();
 
         return values[Random.Shared.Next(values.Length)];
