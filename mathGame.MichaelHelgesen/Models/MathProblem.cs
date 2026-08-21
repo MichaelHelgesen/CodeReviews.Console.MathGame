@@ -4,12 +4,12 @@ namespace mathGame.MichaelHelgesen.Models;
 
 class MathProblem
 {
-    public int FirstNumber { get; set; }
-    public int SecondNumber { get; set; }
-    public string Operator { get; }
-    public int CorrectAnswer { get; set; }
+    internal int FirstNumber { get; set; }
+    internal int SecondNumber { get; set; }
+    internal string Operator { get; }
+    internal int CorrectAnswer { get; set; }
 
-    public MathProblem(MenuItems gameType)
+    internal MathProblem(MenuItems gameType)
     {
         GenerateNumbers();
 
@@ -36,11 +36,11 @@ class MathProblem
         }
     }
 
-    public void GenerateNumbers()
+    void GenerateNumbers()
     {
         FirstNumber = Random.Shared.Next(1, 10);
         SecondNumber = Random.Shared.Next(1, 10);
     }
 
-    public string AsString => $"{FirstNumber} {Operator} {SecondNumber}";
+    internal string AsString => $"{FirstNumber} {Operator} {SecondNumber}";
 }

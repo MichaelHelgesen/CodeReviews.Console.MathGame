@@ -1,6 +1,6 @@
 namespace mathGame.MichaelHelgesen.Models;
 
-internal class Archive
+class Archive
 {
     internal List<Game.GameData> ArchivedGames = new();
     internal void ArchiveGameRound(Game.GameData game)

@@ -1,17 +1,17 @@
 namespace mathGame.MichaelHelgesen.Models;
+
 using mathGame.MichaelHelgesen.Enums;
 using Spectre.Console;
 
-internal class Game
+class Game
 {
     static readonly int numberOfTurns = 5;
     internal static GameData PlayRound(MenuItems gameType)
     {
-        GameData playedGame = new GameData(gameType);
+        List<GameTurn> turns = [];
 
         for (int i = 0; i < numberOfTurns; i++)
         {
-            GameTurn gameTurn = new();
 
             MathProblem mathProblem = new MathProblem(gameType);
 
@@ -21,28 +21,28 @@ internal class Game
 
             PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);
 
-            gameTurn.MathProblem = mathProblem;
-            gameTurn.PlayerAnswer = answer;
+            GameTurn gameTurn = new GameTurn(mathProblem, answer);
 
-            playedGame.GameTurns.Add(gameTurn);
+            turns.Add(gameTurn);
 
         }
+        GameData playedGame = new GameData(gameType, turns);
         return playedGame;
     }
-    public class GameTurn
+    internal class GameTurn(MathProblem mathProblem, PlayerAnswer playerAnswer)
     {
-        public MathProblem MathProblem { get; set; }
-        public PlayerAnswer PlayerAnswer { get; set; }
+        internal MathProblem MathProblem { get; } = mathProblem;
+        internal PlayerAnswer PlayerAnswer { get; } = playerAnswer;
     }
-    public class GameData(MenuItems gameType)
+    internal class GameData(MenuItems gameType, List<GameTurn> turns)
     {
-        private static int _nextGameNumber = 1;
-        public int GameNumber { get; } = _nextGameNumber++;
-        public MenuItems GameType { get; set; } = gameType;
-        public List<GameTurn> GameTurns { get; set; } = new();
+        static int _nextGameNumber = 1;
+        internal int GameNumber { get; } = _nextGameNumber++;
+        internal MenuItems GameType { get; } = gameType;
+        internal List<GameTurn> GameTurns { get; } = turns;
 
 
-        int Points()
+        internal int Points()
         {
             int points = 0;
             foreach (var turn in GameTurns)

@@ -1,13 +1,9 @@
 namespace mathGame.MichaelHelgesen.Models;
 
-internal class PlayerAnswer
+class PlayerAnswer(int correctMathAnswer, int playerAnswer)
 {
-    public int Answer { get; }
-    public int MathAnswer { get; }
-    public PlayerAnswer(int correctMathAnswer, int playerAnswer)
-    {
-        Answer = playerAnswer;
-        MathAnswer = correctMathAnswer;
-    }
-    public bool IsCorrect => Answer == MathAnswer;
+    internal int Answer { get; } = playerAnswer;
+    internal int MathAnswer { get; } = correctMathAnswer;
+
+    internal bool IsCorrect => Answer == MathAnswer;
 }
