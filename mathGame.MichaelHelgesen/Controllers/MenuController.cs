@@ -9,11 +9,11 @@ using Spectre.Console;
 // DONE: You need to create a game that consists of asking the player what's the result of a math question (i.e. 9 x 9 = ?), collecting the input and adding a point in case of a correct answer.
 // DONE: You should record previous games in a List and there should be an option in the menu for the user to visualize a history of previous games.
 // DONE: To follow the DRY Principle, try using just one method for all games. Additionally, double check your project and try to find opportunities to achieve the same functionality with less code, avoiding repetition when possible.
+// DONE: Create a 'Random Game' option where the players will be presented with questions from random operations
 
 
 // TODO: Try to implement levels of difficulty.
 // TODO: Add a timer to track how long the user takes to finish the game.
-// TODO: Create a 'Random Game' option where the players will be presented with questions from random operations
 
 class MenuController
 {

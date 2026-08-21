@@ -11,12 +11,15 @@ class MathProblem
 
     internal MathProblem(MenuItems gameType)
     {
+
+        if (gameType == MenuItems.Random) gameType = GenerateRandomOperator();
+
         GenerateNumbers();
 
         switch (gameType)
         {
             case MenuItems.Addition:
-                
+
                 Operator = "+";
                 CorrectAnswer = FirstNumber + SecondNumber;
                 break;
@@ -40,6 +43,19 @@ class MathProblem
     {
         FirstNumber = Random.Shared.Next(1, 10);
         SecondNumber = Random.Shared.Next(1, 10);
+    }
+
+    MenuItems GenerateRandomOperator()
+    {
+        // This feels like a bad solution
+        // I would rather have two Enums? 
+        var values = Enum.GetValues<MenuItems>()
+                            .Where(m => m != MenuItems.Quit
+                                     && m != MenuItems.Results
+                                     && m != MenuItems.Random)
+                            .ToArray();
+
+        return values[Random.Shared.Next(values.Length)];
     }
 
     internal string AsString => $"{FirstNumber} {Operator} {SecondNumber}";
