@@ -1,6 +1,6 @@
 namespace mathGame.MichaelHelgesen.Enums;
 
-enum Menu
+enum GameType
 {
     Addition,
     Multiplication,
@@ -16,7 +16,7 @@ enum Difficulty
     Hard
 }
 
-enum MenuItems
+enum GameChoice
 {
     Play,
     Results,

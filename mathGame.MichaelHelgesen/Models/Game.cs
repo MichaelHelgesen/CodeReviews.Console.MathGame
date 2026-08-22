@@ -2,13 +2,18 @@ namespace mathGame.MichaelHelgesen.Models;
 
 using mathGame.MichaelHelgesen.Enums;
 using Spectre.Console;
+using System.Diagnostics;
 
 class Game
 {
     static readonly int numberOfTurns = 5;
-internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
-    internal static GameData PlayRound(Menu gameType)
+
+    internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
+
+    internal static GameData PlayRound(GameType gameType)
     {
+        long startTimestamp = Stopwatch.GetTimestamp();
+
         List<GameTurn> turns = [];
 
         for (int i = 0; i < numberOfTurns; i++)
@@ -27,7 +32,11 @@ internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
             turns.Add(gameTurn);
 
         }
-        GameData playedGame = new GameData(gameType, turns);
+
+        TimeSpan tidBrukt = Stopwatch.GetElapsedTime(startTimestamp);
+
+        GameData playedGame = new GameData(gameType, turns, tidBrukt);
+        
         return playedGame;
     }
     internal class GameTurn(MathProblem mathProblem, PlayerAnswer playerAnswer)
@@ -35,11 +44,12 @@ internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
         internal MathProblem MathProblem { get; } = mathProblem;
         internal PlayerAnswer PlayerAnswer { get; } = playerAnswer;
     }
-    internal class GameData(Menu gameType, List<GameTurn> turns)
+    internal class GameData(GameType gameType, List<GameTurn> turns, TimeSpan timeUsed)
     {
         static int _nextGameNumber = 1;
         internal int GameNumber { get; } = _nextGameNumber++;
-        internal Menu GameType { get; } = gameType;
+        internal TimeSpan TimeUsed { get; } = timeUsed;
+        internal GameType GameType { get; } = gameType;
         internal List<GameTurn> GameTurns { get; } = turns;
 
 
@@ -51,7 +61,6 @@ internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
                 if (turn.PlayerAnswer.IsCorrect)
                     points++;
             }
-
             return points;
         }
     }

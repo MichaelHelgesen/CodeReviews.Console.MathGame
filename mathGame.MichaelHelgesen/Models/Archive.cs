@@ -14,6 +14,8 @@ class Archive
         {
             Console.WriteLine($"A game of {gameRound.GameType}");
             Console.WriteLine($"Game number: {gameRound.GameNumber}");
+            Console.WriteLine($"Time: {gameRound.TimeUsed:mm\\:ss}");
+            Console.WriteLine($"Score: {gameRound.Points()}");
             foreach (var gameTurn in gameRound.GameTurns)
             {
                 Console.WriteLine($"Math problem: {gameTurn.MathProblem.AsString}");

@@ -9,29 +9,29 @@ class MathProblem
     internal string Operator { get; }
     internal int CorrectAnswer { get; set; }
 
-    internal MathProblem(Menu gameType)
+    internal MathProblem(GameType gameType)
     {
 
-        if (gameType == Menu.Random) gameType = GenerateRandomOperator();
+        if (gameType == GameType.Random) gameType = GenerateRandomOperator();
 
         GenerateNumbers();
 
         switch (gameType)
         {
-            case Menu.Addition:
+            case GameType.Addition:
 
                 Operator = "+";
                 CorrectAnswer = FirstNumber + SecondNumber;
                 break;
-            case Menu.Subtraction:
+            case GameType.Subtraction:
                 Operator = "-";
                 CorrectAnswer = FirstNumber - SecondNumber;
                 break;
-            case Menu.Multiplication:
+            case GameType.Multiplication:
                 Operator = "*";
                 CorrectAnswer = FirstNumber * SecondNumber;
                 break;
-            case Menu.Division:
+            case GameType.Division:
                 FirstNumber *= SecondNumber;
                 Operator = "/";
                 CorrectAnswer = FirstNumber / SecondNumber;
@@ -53,11 +53,11 @@ class MathProblem
         SecondNumber = Random.Shared.Next(1, maxNumber);
     }
 
-    Menu GenerateRandomOperator()
+    GameType GenerateRandomOperator()
     {
 
-        var values = Enum.GetValues<Menu>()
-                            .Where(m => m != Menu.Random)
+        var values = Enum.GetValues<GameType>()
+                            .Where(m => m != GameType.Random)
                             .ToArray();
 
         return values[Random.Shared.Next(values.Length)];

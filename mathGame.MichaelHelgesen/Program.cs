@@ -1,3 +1,3 @@
 using mathGame.MichaelHelgesen.Controllers;
 
-MenuController.Run();
+MenuController.RenderMainMenu();

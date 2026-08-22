@@ -12,28 +12,28 @@ using Spectre.Console;
 // DONE: To follow the DRY Principle, try using just one method for all games. Additionally, double check your project and try to find opportunities to achieve the same functionality with less code, avoiding repetition when possible.
 // DONE: Create a 'Random Game' option where the players will be presented with questions from random operations
 // DONE: Try to implement levels of difficulty.
+// DONE: Add a timer to track how long the user takes to finish the game.
 
-// TODO: Add a timer to track how long the user takes to finish the game.
 
 class MenuController
 {
-    internal static void Run()
+    internal static void RenderMainMenu()
     {
         Console.Clear();
 
         AnsiConsole.MarkupLine("[bold blue]Welcome[/] to [green]the Math Game[/]!");
 
-        var playerChoice = DisplayMainMenu();
+        var mainMenuChoice = DisplayMainMenu();
 
-        switch (playerChoice)
+        switch (mainMenuChoice)
         {
-            case MenuItems.Play:
+            case GameChoice.Play:
                 DisplayGameMenu();
                 break;
-            case MenuItems.Results:
-                DisplayResults(playerChoice);
+            case GameChoice.Results:
+                DisplayResults(mainMenuChoice);
                 break;
-            case MenuItems.Difficulty:
+            case GameChoice.Difficulty:
                 DisplayDifficultyMenu();
                 break;
         }
@@ -41,77 +41,97 @@ class MenuController
 
     private static void DisplayDifficultyMenu()
     {
-        var difficulty = Enum.GetValues<Difficulty>().ToList();
-        var difficultyChoice = AnsiConsole.Prompt(
+        var DifficultyChoices = Enum.GetValues<Difficulty>().ToList();
+        var DifficultyChoice = AnsiConsole.Prompt(
              new SelectionPrompt<Difficulty>()
                     .Title("Choose [green]game type[/] would you like?")
-                    .AddChoices(difficulty));
-        Game.DifficultySetting = difficultyChoice;
-        Run();
+                    .UseConverter(item => GenerateDifficultyMenu(item))
+                    .AddChoices(DifficultyChoices));
+        Game.DifficultySetting = DifficultyChoice;
+        RenderMainMenu();
     }
 
-    private static void DisplayResults(MenuItems playerChoice)
+    private static void DisplayResults(GameChoice mainMenuChoice)
     {
         Console.Clear();
-        AnsiConsole.MarkupLine($"You selected: [yellow]{playerChoice}[/]");
+        AnsiConsole.MarkupLine($"You selected: [yellow]{mainMenuChoice}[/]");
         GameController.archive.DisplayArchive();
         AnsiConsole.Prompt(
             new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
             .AllowEmpty()
         );
-        Run();
+        RenderMainMenu();
     }
     private static void DisplayGameMenu()
     {
-        var choices = Enum.GetValues<Menu>().ToList();
-        var menuChoice = AnsiConsole.Prompt(
-             new SelectionPrompt<Menu>()
+        var GameChoices = Enum.GetValues<GameType>().ToList();
+        var gameChoice = AnsiConsole.Prompt(
+             new SelectionPrompt<GameType>()
                     .Title("Choose [green]game type[/] would you like?")
                     .UseConverter(item => GenerateGameMenu(item))
-                    .AddChoices(choices));
-        GameController.StartGame(menuChoice);
+                    .AddChoices(GameChoices));
+        GameController.StartGame(gameChoice);
     }
 
-    private static MenuItems DisplayMainMenu()
+    private static GameChoice DisplayMainMenu()
     {
         var menuChoices = GenerateMenuChoices();
         var menuChoice = AnsiConsole.Prompt(
-        new SelectionPrompt<MenuItems>()
+        new SelectionPrompt<GameChoice>()
             .Title("Choose [green]game type[/] would you like?")
-            .UseConverter(item => GenerateMenuItems(item))
+            .UseConverter(item => GenerateMainMenuItem(item))
             .AddChoices(menuChoices));
         return menuChoice;
     }
 
-    private static List<MenuItems> GenerateMenuChoices()
+    private static List<GameChoice> GenerateMenuChoices()
     {
-        var choices = Enum.GetValues<MenuItems>().ToList();
-        if (GameController.archive.ArchivedGames.Count < 1) choices.Remove(MenuItems.Results);
+        var choices = Enum.GetValues<GameChoice>().ToList();
+        if (GameController.archive.ArchivedGames.Count < 1) choices.Remove(GameChoice.Results);
         return choices;
     }
 
-    private static string GenerateMenuItems(MenuItems item)
+    private static string GenerateMainMenuItem(GameChoice item)
     {
         return item switch
         {
-            MenuItems.Difficulty => "Velg vanskelighetsgrad",
-            MenuItems.Play => "Spill en runde",
-            MenuItems.Results => "📊 Vis tidligere resultat og statistikk",
-            MenuItems.Quit => "❌ Avslutt spillet",
+            GameChoice.Difficulty => "Velg vanskelighetsgrad",
+            GameChoice.Play => "Spill en runde",
+            GameChoice.Results => "📊 Vis tidligere resultat og statistikk",
+            GameChoice.Quit => "❌ Avslutt spillet",
             _ => item.ToString()
         };
     }
 
-    private static string GenerateGameMenu(Menu item)
+    private static string GenerateGameMenu(GameType item)
     {
         return item switch
         {
-            Menu.Addition => "➕ Legg sammen tall (Addisjon)",
-            Menu.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
-            Menu.Division => "Dele",
-            Menu.Multiplication => "* Gange",
+            GameType.Addition => "➕ Legg sammen tall (Addisjon)",
+            GameType.Subtraction => "➖ Trekk fra tall (Subtraksjon)",
+            GameType.Division => "Dele",
+            GameType.Multiplication => "* Gange",
             _ => item.ToString()
         };
     }
 
+    private static string GenerateDifficultyMenu(Difficulty item)
+    {
+        bool isSelected = item == Game.DifficultySetting;
+
+        string text = item switch
+        {
+            Difficulty.Easy => "Easy: Opp til 10",
+            Difficulty.Normal => "Normal: Opp til 100",
+            Difficulty.Hard => "Difficult: Opp til 1000",
+            _ => item.ToString()
+        };
+        if (isSelected)
+        {
+            return $"[bold green]{text} (Aktiv)[/]";
+        }
+
+        // Ellers returneres teksten uendret/tonet ned
+        return $"[grey]{text}[/]";
+    }
 }
