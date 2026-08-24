@@ -1,5 +1,7 @@
 namespace mathGame.MichaelHelgesen.Models;
 
+using Spectre.Console;
+
 class Archive
 {
     internal List<Game.GameData> ArchivedGames = new();
@@ -8,21 +10,42 @@ class Archive
         ArchivedGames.Add(game);
     }
 
+    internal void DisplayLastGame()
+    {
+        if (ArchivedGames.Count == 0) return;
+
+        DisplayArchive([ArchivedGames[^1]]);
+    }
+
     internal void DisplayArchive()
     {
-        foreach (var gameRound in ArchivedGames)
+        DisplayArchive(ArchivedGames);
+    }
+
+    internal void DisplayArchive(List<Game.GameData> games)
+    {
+        foreach (var gameRound in games)
         {
-            Console.WriteLine($"A game of {gameRound.GameType}");
-            Console.WriteLine($"Game number: {gameRound.GameNumber}");
-            Console.WriteLine($"Time: {gameRound.TimeUsed:mm\\:ss}");
-            Console.WriteLine($"Score: {gameRound.Points()}");
-            foreach (var gameTurn in gameRound.GameTurns)
+            AnsiConsole.MarkupLine($"[bold blue]Game #{gameRound.GameNumber} - {gameRound.GameType}[/]");
+            AnsiConsole.MarkupLine($"[dim]Time used:[/] [yellow]{gameRound.TimeUsed:mm\\:ss}[/]");
+            AnsiConsole.MarkupLine($"[dim]Total points:[/]  [bold underline]{gameRound.Points()}[/]\n");
+
+            for (int i = 0; i < gameRound.GameTurns.Count; i++)
             {
-                Console.WriteLine($"Math problem: {gameTurn.MathProblem.AsString}");
-                Console.WriteLine($"Correct answer: {gameTurn.MathProblem.CorrectAnswer}");
-                Console.WriteLine($"Player answer: {gameTurn.PlayerAnswer.Answer}");
-                Console.WriteLine($"Player answer correct: {gameTurn.PlayerAnswer.IsCorrect}");
+                var turn = gameRound.GameTurns[i];
+                bool isCorrect = turn.PlayerAnswer.IsCorrect;
+
+                // Velg farge basert på om svaret var riktig eller feil
+                string statusColor = isCorrect ? "green" : "red";
+                string statusIcon = isCorrect ? "[✓]" : "[✗]";
+
+                AnsiConsole.MarkupLine(
+                    $"  [dim]Round {i + 1}:[/] {turn.MathProblem.AsString} = [bold]{turn.MathProblem.CorrectAnswer}[/]" +
+                    $"\tYour answer: [{statusColor}]{turn.PlayerAnswer.Answer} [{statusIcon}][/]"
+                );
             }
+
+            AnsiConsole.WriteLine();
         }
     }
 }

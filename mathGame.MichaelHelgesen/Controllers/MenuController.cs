@@ -31,6 +31,7 @@ class MenuController
 
     private static void DisplayDifficultyMenu()
     {
+        Console.Clear();
         var DifficultyChoices = Enum.GetValues<Difficulty>().Cast<Difficulty?>().ToList();
         DifficultyChoices.Add(null);
         var DifficultyChoice = AnsiConsole.Prompt(
@@ -52,21 +53,22 @@ class MenuController
     private static void DisplayResults(GameChoice mainMenuChoice)
     {
         Console.Clear();
-        AnsiConsole.MarkupLine($"You selected: [yellow]{mainMenuChoice}[/]");
+        AnsiConsole.MarkupLine($"[yellow]{mainMenuChoice}[/]:\n");
         GameController.archive.DisplayArchive();
         AnsiConsole.Prompt(
-            new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
+            new TextPrompt<string>($"[grey]Press [bold]Enter[/] to return to main menu.[/]")
             .AllowEmpty()
         );
         RenderMainMenu();
     }
     private static void DisplayGameMenu()
     {
+        Console.Clear();
         var GameChoices = Enum.GetValues<GameType>().Cast<GameType?>().ToList();
         GameChoices.Add(null);
         var gameChoice = AnsiConsole.Prompt(
              new SelectionPrompt<GameType?>()
-                    .Title("Choose an [green]option[/] from the meny to continue.")
+                    .Title("Choose a [green]game mode[/] from the meny to continue.")
                     .UseConverter(item => item.HasValue
                     ? GenerateGameMenu(item.Value)
                     : "[yellow]<- Back to Main Menu[/]")
@@ -76,7 +78,7 @@ class MenuController
             RenderMainMenu();
             return;
         }
-        GameController.StartGame(gameChoice.Value);
+        GameController.RunGame(gameChoice.Value);
     }
 
     private static GameChoice DisplayMainMenu()
@@ -84,7 +86,7 @@ class MenuController
         var menuChoices = GenerateMainMenuChoices();
         var menuChoice = AnsiConsole.Prompt(
         new SelectionPrompt<GameChoice>()
-            .Title("Choose [green]game type[/] would you like?")
+            .Title("Please choose [green]an option[/] from the meny below")
             .UseConverter(item => GenerateMainMenuItem(item))
             .AddChoices(menuChoices));
         return menuChoice;

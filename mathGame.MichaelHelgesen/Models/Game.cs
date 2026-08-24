@@ -54,12 +54,13 @@ class Game
     {
         for (int i = 0; i < numberOfTurns; i++)
         {
-
+            Console.Clear();
+            
             MathProblem mathProblem = new MathProblem(gameType);
 
-            AnsiConsole.MarkupLine($"[bold blue]Spørsmål {i + 1} av 5[/]");
+            AnsiConsole.MarkupLine($"[bold blue]Question {i + 1} of 5[/]");
 
-            int playerAnswer = AnsiConsole.Ask<int>($"Hva er [green]{mathProblem.AsString}[/]?");
+            int playerAnswer = AnsiConsole.Ask<int>($"What is [green]{mathProblem.AsString}[/]?");
 
             PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);
 

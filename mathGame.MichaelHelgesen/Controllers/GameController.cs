@@ -1,5 +1,4 @@
 namespace mathGame.MichaelHelgesen.Controllers;
-
 using mathGame.MichaelHelgesen.Enums;
 using mathGame.MichaelHelgesen.Models;
 using Spectre.Console;
@@ -9,35 +8,29 @@ class GameController()
 {
     internal static Archive archive = new();
 
-    internal static void StartGame(GameType gameType)
+    internal static void RunGame(GameType gameType)
     {
+        Console.Clear();
         AnsiConsole.Prompt(
-            new TextPrompt<string>($"You selected: [yellow]{gameType}[/]. [grey]Press [bold]Enter[/] to continue...[/]")
+            new TextPrompt<string>($"[grey]Press [bold]Enter[/] when ready. Your game is beeing timed.[/]")
             .AllowEmpty()
         );
+        Console.Clear();
 
         var gameRound = Game.PlayRound(gameType);
 
         archive.ArchiveGameRound(gameRound);
 
-        DisplayGameResults(gameRound);
-
-        MenuController.RenderMainMenu();
-    }
-
-    internal static void DisplayGameResults(Game.GameData gameRound)
-    {
         Console.Clear();
-        Console.WriteLine($"Round over. You scored: {gameRound.Points()}, in {gameRound.TimeUsed.ToString(@"mm\:ss")}");
-        foreach (var q in gameRound.GameTurns)
-        {
-            Console.WriteLine($"{q.MathProblem.AsString} = {q.MathProblem.CorrectAnswer}\tYour answer: {q.PlayerAnswer.Answer}");
-        }
-        
+
+        archive.DisplayLastGame();
+
         AnsiConsole.Prompt(
-            new TextPrompt<string>($"[grey]Press [bold]Enter[/] to continue...[/]")
+            new TextPrompt<string>($"[grey]Press [bold]Enter[/] to return to main menu.[/]")
             .AllowEmpty()
         );
+
+        MenuController.RenderMainMenu();
     }
 }
 
