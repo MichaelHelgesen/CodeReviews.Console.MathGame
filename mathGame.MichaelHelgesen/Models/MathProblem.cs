@@ -31,7 +31,7 @@ class MathProblem
                 Operator = "*";
                 CorrectAnswer = FirstNumber * SecondNumber;
                 break;
-            case GameType.Division:
+            default:
                 FirstNumber *= SecondNumber;
                 Operator = "/";
                 CorrectAnswer = FirstNumber / SecondNumber;

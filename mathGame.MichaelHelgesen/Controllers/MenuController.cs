@@ -27,26 +27,30 @@ class MenuController
                 DisplayDifficultyMenu();
                 break;
         }
+        
     }
 
     private static void DisplayDifficultyMenu()
     {
         Console.Clear();
-        var DifficultyChoices = Enum.GetValues<Difficulty>().Cast<Difficulty?>().ToList();
-        DifficultyChoices.Add(null);
-        var DifficultyChoice = AnsiConsole.Prompt(
-             new SelectionPrompt<Difficulty?>()
-                    .Title("Choose [green]difficulty[/] level:")
-                .UseConverter(item => item.HasValue
-                    ? GenerateDifficultyMenu(item.Value)
-                    : "[yellow]<- Back to Main Menu[/]")
+        var DifficultyChoices = Enum.GetValues<Difficulty>();
+
+        var difficultyChoice = AnsiConsole.Prompt(
+             new SelectionPrompt<Difficulty>()
+                .Title("Choose [green]difficulty[/] level:")
+                .UseConverter(item => item switch
+                    {
+                        Difficulty.Back => "[yellow]<- Back to Main Menu[/]",
+                        _ => GenerateDifficultyMenu(item)
+                    })
                 .AddChoices(DifficultyChoices));
-        if (DifficultyChoice == null)
+
+        if (difficultyChoice == Difficulty.Back)
         {
             RenderMainMenu();
             return;
         }
-        Game.DifficultySetting = DifficultyChoice.Value;
+        Game.DifficultySetting = difficultyChoice;
         RenderMainMenu();
     }
 
@@ -64,26 +68,30 @@ class MenuController
     private static void DisplayGameMenu()
     {
         Console.Clear();
-        var GameChoices = Enum.GetValues<GameType>().Cast<GameType?>().ToList();
-        GameChoices.Add(null);
+        var GameChoices = Enum.GetValues<GameType>();
+
         var gameChoice = AnsiConsole.Prompt(
-             new SelectionPrompt<GameType?>()
+             new SelectionPrompt<GameType>()
                     .Title("Choose a [green]game mode[/] from the meny to continue.")
-                    .UseConverter(item => item.HasValue
-                    ? GenerateGameMenu(item.Value)
-                    : "[yellow]<- Back to Main Menu[/]")
+                    .UseConverter(item => item switch
+                    {
+                        GameType.Back => "[yellow]<- Back to Main Menu[/]",
+                        _ => GenerateGameMenu(item)
+                    })
                     .AddChoices(GameChoices));
-        if (gameChoice == null)
+        
+        if (gameChoice == GameType.Back)
         {
             RenderMainMenu();
             return;
         }
-        GameController.RunGame(gameChoice.Value);
+        GameController.RunGame(gameChoice);
     }
 
     private static GameChoice DisplayMainMenu()
     {
         var menuChoices = GenerateMainMenuChoices();
+
         var menuChoice = AnsiConsole.Prompt(
         new SelectionPrompt<GameChoice>()
             .Title("Please choose [green]an option[/] from the meny below")
@@ -139,8 +147,6 @@ class MenuController
         {
             return $"[bold green]{text} (active)[/]";
         }
-
-        // Ellers returneres teksten uendret/tonet ned
         return $"[grey]{text}[/]";
     }
 }

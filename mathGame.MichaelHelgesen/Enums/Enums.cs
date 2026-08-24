@@ -6,14 +6,16 @@ enum GameType
     Multiplication,
     Division,
     Subtraction,
-    Random
+    Random,
+    Back
 }
 
 enum Difficulty
 {
     Easy,
     Normal,
-    Hard
+    Hard,
+    Back
 }
 
 enum GameChoice
