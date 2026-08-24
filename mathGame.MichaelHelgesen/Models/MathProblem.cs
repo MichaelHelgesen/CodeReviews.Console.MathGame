@@ -59,7 +59,6 @@ class MathProblem
         var values = Enum.GetValues<GameType>()
                             .Where(m => m != GameType.Random)
                             .ToArray();
-
         return values[Random.Shared.Next(values.Length)];
     }
 

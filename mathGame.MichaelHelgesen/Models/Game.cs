@@ -61,11 +61,8 @@ class Game
             AnsiConsole.MarkupLine($"[bold blue]Question {i + 1} of 5[/]");
 
             int playerAnswer = AnsiConsole.Ask<int>($"What is [green]{mathProblem.AsString}[/]?");
-
             PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);
-
             GameTurn gameTurn = new GameTurn(mathProblem, answer);
-
             turns.Add(gameTurn);
 
         }

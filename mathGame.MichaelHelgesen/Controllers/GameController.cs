@@ -18,7 +18,6 @@ class GameController()
         Console.Clear();
 
         var gameRound = Game.PlayRound(gameType);
-
         archive.ArchiveGameRound(gameRound);
 
         Console.Clear();
@@ -29,7 +28,6 @@ class GameController()
             new TextPrompt<string>($"[grey]Press [bold]Enter[/] to return to main menu.[/]")
             .AllowEmpty()
         );
-
         MenuController.RenderMainMenu();
     }
 }

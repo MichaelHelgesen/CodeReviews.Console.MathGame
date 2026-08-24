@@ -27,7 +27,6 @@ class MenuController
                 DisplayDifficultyMenu();
                 break;
         }
-        
     }
 
     private static void DisplayDifficultyMenu()
