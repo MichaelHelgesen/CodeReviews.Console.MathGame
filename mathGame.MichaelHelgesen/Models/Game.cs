@@ -8,7 +8,7 @@ class Game
 {
     static readonly int numberOfTurns = 5;
 
-    internal static Difficulty DifficultySetting { get; set; } = Difficulty.Normal;
+    internal static Difficulty DifficultySetting { get; set; } = Difficulty.Easy;
 
     internal static GameData PlayRound(GameType gameType)
     {
@@ -16,27 +16,12 @@ class Game
 
         List<GameTurn> turns = [];
 
-        for (int i = 0; i < numberOfTurns; i++)
-        {
+        PlayTurns(gameType, turns);
 
-            MathProblem mathProblem = new MathProblem(gameType);
+        TimeSpan timeUsed = Stopwatch.GetElapsedTime(startTimestamp);
 
-            AnsiConsole.MarkupLine($"[bold blue]Spørsmål {i + 1} av 5[/]");
+        GameData playedGame = new GameData(gameType, turns, timeUsed);
 
-            int playerAnswer = AnsiConsole.Ask<int>($"Hva er [green]{mathProblem.AsString}[/]?");
-
-            PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);
-
-            GameTurn gameTurn = new GameTurn(mathProblem, answer);
-
-            turns.Add(gameTurn);
-
-        }
-
-        TimeSpan tidBrukt = Stopwatch.GetElapsedTime(startTimestamp);
-
-        GameData playedGame = new GameData(gameType, turns, tidBrukt);
-        
         return playedGame;
     }
     internal class GameTurn(MathProblem mathProblem, PlayerAnswer playerAnswer)
@@ -62,6 +47,26 @@ class Game
                     points++;
             }
             return points;
+        }
+    }
+
+    static void PlayTurns(GameType gameType, List<GameTurn> turns)
+    {
+        for (int i = 0; i < numberOfTurns; i++)
+        {
+
+            MathProblem mathProblem = new MathProblem(gameType);
+
+            AnsiConsole.MarkupLine($"[bold blue]Spørsmål {i + 1} av 5[/]");
+
+            int playerAnswer = AnsiConsole.Ask<int>($"Hva er [green]{mathProblem.AsString}[/]?");
+
+            PlayerAnswer answer = new PlayerAnswer(mathProblem.CorrectAnswer, playerAnswer);
+
+            GameTurn gameTurn = new GameTurn(mathProblem, answer);
+
+            turns.Add(gameTurn);
+
         }
     }
 }
