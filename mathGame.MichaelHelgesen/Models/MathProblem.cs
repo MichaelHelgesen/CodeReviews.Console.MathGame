@@ -4,9 +4,9 @@ namespace mathGame.MichaelHelgesen.Models;
 
 class MathProblem
 {
-    internal int FirstNumber { get; set; }
-    internal int SecondNumber { get; set; }
-    internal string Operator { get; }
+    int FirstNumber { get; set; }
+    int SecondNumber { get; set; }
+    string Operator { get; }
     internal int CorrectAnswer { get; set; }
 
     internal MathProblem(GameType gameType)
@@ -19,7 +19,6 @@ class MathProblem
         switch (gameType)
         {
             case GameType.Addition:
-
                 Operator = "+";
                 CorrectAnswer = FirstNumber + SecondNumber;
                 break;

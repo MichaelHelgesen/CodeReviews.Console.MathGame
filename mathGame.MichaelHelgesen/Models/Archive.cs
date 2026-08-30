@@ -1,10 +1,10 @@
 namespace mathGame.MichaelHelgesen.Models;
-
 using Spectre.Console;
 
 class Archive
 {
     internal List<Game.GameData> ArchivedGames = new();
+
     internal void ArchiveGameRound(Game.GameData game)
     {
         ArchivedGames.Add(game);
@@ -22,7 +22,7 @@ class Archive
         DisplayArchive(ArchivedGames);
     }
 
-    internal void DisplayArchive(List<Game.GameData> games)
+    void DisplayArchive(List<Game.GameData> games)
     {
         foreach (var gameRound in games)
         {
@@ -35,7 +35,6 @@ class Archive
                 var turn = gameRound.GameTurns[i];
                 bool isCorrect = turn.PlayerAnswer.IsCorrect;
 
-                // Velg farge basert på om svaret var riktig eller feil
                 string statusColor = isCorrect ? "green" : "red";
                 string statusIcon = isCorrect ? "[✓]" : "[✗]";
 
